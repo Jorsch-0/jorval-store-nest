@@ -62,6 +62,13 @@ export class AuthController {
     return;
   }
 
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', accessTokenCookieOptions);
+    res.clearCookie('refresh_token', refreshTokenCookieOptions);
+    return;
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('test-protected')
   testProtected() {
