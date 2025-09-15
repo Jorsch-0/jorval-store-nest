@@ -19,7 +19,14 @@ export class AuthService {
       throw new BadRequestException('User with this email already exists');
     }
 
-    return await this.usersService.create(registerDto);
+    const user = await this.usersService.create(registerDto);
+    const { access_token, refresh_token } = this.getJwtTokens(user);
+
+    return {
+      user,
+      access_token,
+      refresh_token,
+    };
   }
 
   async login(loginDto: LoginDto) {
