@@ -14,10 +14,10 @@ import {
   accessTokenCookieOptions,
   refreshTokenCookieOptions,
 } from './constants';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import type { PublicUser } from 'src/users/users.types';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { Auth } from './decorators/auth.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -69,7 +69,7 @@ export class AuthController {
     return;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Post('test-protected')
   testProtected() {
     return { message: 'You have accessed a protected route' };
