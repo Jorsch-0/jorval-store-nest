@@ -15,6 +15,10 @@ export class UsersService {
     return this.usersRepo.create(registerDto, hashedPassword);
   }
 
+  async find(id: string) {
+    return this.usersRepo.find(id);
+  }
+
   async findByEmail(email: string) {
     return this.usersRepo.findByEmail(email);
   }
