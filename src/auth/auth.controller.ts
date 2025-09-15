@@ -62,6 +62,7 @@ export class AuthController {
     return;
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', accessTokenCookieOptions);
@@ -70,6 +71,7 @@ export class AuthController {
   }
 
   @Auth()
+  @HttpCode(HttpStatus.OK)
   @Post('test-protected')
   testProtected() {
     return { message: 'You have accessed a protected route' };
