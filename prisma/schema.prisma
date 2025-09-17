@@ -19,13 +19,78 @@ model User {
   fullName  String
   password  String
   role      Role     @default(USER)
+  Cart      Cart?
+  Orders    Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  Products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  slug        String      @unique
+  title       String
+  description String
+  price       Float
+  stock       Int
+  images      String[]
+  categoryId  String
+  Category    Category    @relation(fields: [categoryId], references: [id])
+  CartItems   CartItem[]
+  OrderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  User      User       @relation(fields: [userId], references: [id])
+  CartItems CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
   id        String   @id @default(uuid())
-  name      String   @unique
+  quantity  Int
+  cartId    String
+  Cart      Cart     @relation(fields: [cartId], references: [id])
+  productId String
+  Product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, cartId])
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String
+  User      User        @relation(fields: [userId], references: [id])
+  total     Float
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  quantity  Int
+  price     Float
+  orderId   String
+  Order     Order    @relation(fields: [orderId], references: [id])
+  productId String
+  Product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
